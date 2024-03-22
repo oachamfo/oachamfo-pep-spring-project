@@ -42,7 +42,30 @@ public class MessageService {
 
 
     public List<Message> getAllMessagesByAccountId(Integer accountId) {
-       System.out.println("This is the accoundId:" + accountId);
         return messageRepository.findByPostedBy(accountId);
+    }
+
+
+    public Optional<Message> getMessageByMessageId(Integer messageId){
+        return messageRepository.findById(messageId);
+    }
+
+    public int updateMessageTextByMessageId(Integer messageId, String updatedMessageText){
+        int rowsAffected = 0;
+        
+        //Perform updatedMessageText validation
+        if (updatedMessageText == null || updatedMessageText.isEmpty() || updatedMessageText.length() > 255){
+            return 0; //validation fails
+        }
+
+        //Valdiation passes       
+        try {
+            // Update the message text in the database using the repository method
+            rowsAffected = messageRepository.updateMessageText(messageId, updatedMessageText);
+    
+         } catch (Exception e) {
+            // Handle any exceptions
+          }
+        return rowsAffected; //return the number of rows affected
     }
 }
